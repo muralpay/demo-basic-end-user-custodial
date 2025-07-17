@@ -1,7 +1,7 @@
 import React from 'react';
 import { Step, Button, FormInput, RadioGroup, InfoBox, ResultDisplay } from '../ui';
 import { MuralApiClient } from '../../index';
-import { useNonCustodialContext } from '../../context/NonCustodialContext';
+import { useEndUserCustodialContext } from '../../context/EndUserCustodialContext';
 
 interface CreateOrganizationStepProps {
   stepNumber: number;
@@ -46,19 +46,19 @@ export const CreateOrganizationStep: React.FC<CreateOrganizationStepProps> = ({
     setApproversList,
     setSelectedApproverIndex,
     setStepLoading
-  } = useNonCustodialContext();
+  } = useEndUserCustodialContext();
 
   const isCompleted = completedSteps[stepNumber - 1];
   const isLoading = loadingStates[stepNumber - 1];
 
   const handleCreateOrg = async () => {
     let payload;
-    if (orgType === 'nonCustodialIndividual') {
+    if (orgType === 'endUserCustodialIndividual') {
       if (!firstName || !lastName || !email) {
         addLog('❌ Please fill in all individual fields', 'error');
         return;
       }
-      payload = { type: 'nonCustodialIndividual', firstName, lastName, email };
+      payload = { type: 'endUserCustodialIndividual', firstName, lastName, email };
     } else {
       if (!businessName || !businessEmail) {
         addLog('❌ Please fill in business name and email', 'error');
@@ -73,7 +73,7 @@ export const CreateOrganizationStep: React.FC<CreateOrganizationStepProps> = ({
         addLog('❌ Invalid JSON for approvers', 'error');
         return;
       }
-      payload = { type: 'nonCustodialBusiness', businessName, email: businessEmail, approvers: approversArray };
+      payload = { type: 'endUserCustodialBusiness', businessName, email: businessEmail, approvers: approversArray };
     }
     
     setStepLoading(stepNumber - 1, true);
@@ -81,13 +81,13 @@ export const CreateOrganizationStep: React.FC<CreateOrganizationStepProps> = ({
     
     try {
       const apiClient = new MuralApiClient();
-      const result = await apiClient.createNonCustodialOrg(payload);
+      const result = await apiClient.createEndUserCustodialOrg(payload);
       addLog(`✅ Organization created successfully!`, 'success');
       addLog(`📋 Organization ID: ${result.id}`, 'success');
       setOrgId(result.id);
       
       // Handle approvers based on organization type
-      if (orgType === 'nonCustodialIndividual') {
+      if (orgType === 'endUserCustodialIndividual') {
         // For individual orgs, there's typically one approver (the individual themselves)
         if (result.approver && result.approver.id) {
           setApproverId(result.approver.id);
@@ -111,7 +111,7 @@ export const CreateOrganizationStep: React.FC<CreateOrganizationStepProps> = ({
           
           setApproversList(approversListData);
           addLog(`📋 ${approversListData.length} approvers available:`, 'success');
-          approversListData.forEach((approver, index) => {
+          approversListData.forEach((approver: any, index: number) => {
             addLog(`   ${index + 1}. ${approver.name} (${approver.email}) - ID: ${approver.id}`, 'info');
           });
           
@@ -142,8 +142,8 @@ export const CreateOrganizationStep: React.FC<CreateOrganizationStepProps> = ({
   };
 
   const orgTypeOptions = [
-    { value: 'nonCustodialIndividual', label: 'Individual' },
-    { value: 'nonCustodialBusiness', label: 'Business' }
+    { value: 'endUserCustodialIndividual', label: 'Individual' },
+    { value: 'endUserCustodialBusiness', label: 'Business' }
   ];
 
   const isActive = currentStep === stepNumber;
@@ -192,12 +192,12 @@ export const CreateOrganizationStep: React.FC<CreateOrganizationStepProps> = ({
         label="Organization Type:"
         name="orgType"
         value={orgType}
-        onChange={(value: string) => setOrgType(value as 'nonCustodialIndividual' | 'nonCustodialBusiness')}
+        onChange={(value: string) => setOrgType(value as 'endUserCustodialIndividual' | 'endUserCustodialBusiness')}
         options={orgTypeOptions}
         disabled={!isActive}
       />
 
-      {orgType === 'nonCustodialIndividual' ? (
+      {orgType === 'endUserCustodialIndividual' ? (
         <>
           <FormInput
             id="firstName"
@@ -277,7 +277,7 @@ export const CreateOrganizationStep: React.FC<CreateOrganizationStepProps> = ({
           {approverId && <><strong>Approver ID:</strong> {approverId}</>}
           
           {/* Show approver selection for business organizations with multiple approvers */}
-          {orgType === 'nonCustodialBusiness' && approversList.length > 1 && (
+          {orgType === 'endUserCustodialBusiness' && approversList.length > 1 && (
             <InfoBox variant="info">
               <h4 style={{ marginTop: 0, marginBottom: '10px' }}>👥 Select Approver for Authentication</h4>
               <p style={{ marginBottom: '10px', fontSize: '14px' }}>
@@ -312,7 +312,7 @@ export const CreateOrganizationStep: React.FC<CreateOrganizationStepProps> = ({
           )}
           
           {/* Show single approver info for individual orgs or business orgs with one approver */}
-          {(orgType === 'nonCustodialIndividual' || approversList.length === 1) && approversList.length > 0 && (
+          {(orgType === 'endUserCustodialIndividual' || approversList.length === 1) && approversList.length > 0 && (
             <InfoBox variant="info">
               <strong>👤 Approver Details:</strong><br/>
               <span>{approversList[0].name} ({approversList[0].email})</span>

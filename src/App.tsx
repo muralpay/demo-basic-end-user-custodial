@@ -1,10 +1,10 @@
 import React from 'react';
-import NonCustodialDemo from './NonCustodialDemo';
+import EndUserCustodialDemo from './EndUserCustodialDemo';
 
 const App: React.FC = () => {
   return (
     <div>
-      <NonCustodialDemo />
+      <EndUserCustodialDemo />
     </div>
   );
 };

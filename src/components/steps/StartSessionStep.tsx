@@ -1,6 +1,6 @@
 import React from 'react';
 import { Step, Button, FormInput, InfoBox } from '../ui';
-import { useNonCustodialContext } from '../../context/NonCustodialContext';
+import { useEndUserCustodialContext } from '../../context/EndUserCustodialContext';
 
 interface StartSessionStepProps {
   stepNumber: number;
@@ -20,7 +20,7 @@ export const StartSessionStep: React.FC<StartSessionStepProps> = ({
     markStepComplete,
     setEmailCode,
     setStepLoading
-  } = useNonCustodialContext();
+  } = useEndUserCustodialContext();
 
   const isCompleted = completedSteps[stepNumber - 1];
   const isLoading = loadingStates[stepNumber - 1];

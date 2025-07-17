@@ -1,7 +1,7 @@
 // Non-Custodial SDK Wrapper Demo
 // This wraps the @muralpay/browser-sdk for testing
 
-import { NonCustodialSDK } from '@muralpay/browser-sdk';
+import { EndUserCustodialSDK } from '@muralpay/browser-sdk';
 import { MURAL_API_CONFIG } from './config';
 
 // Mural API Client for making API calls
@@ -16,7 +16,7 @@ export class MuralApiClient {
   }
 
   // Create a non-custodial organization
-  async createNonCustodialOrg(payload: any, onBehalfOf?: string): Promise<any> {
+  async createEndUserCustodialOrg(payload: any, onBehalfOf?: string): Promise<any> {
     try {
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export class MuralApiClient {
   // NOT the organization ID. The orgId is used for the on-behalf-of header.
   async initiateChallenge(payload: { publicKey: string, approverId: string }, orgId: string): Promise<any> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/approvers/non-custodial/initiate-challenge`, {
+      const response = await fetch(`${this.baseUrl}/api/approvers/end-user-custodial/initiate-challenge`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export class MuralApiClient {
   // Get payout request body to sign
   async getPayoutRequestBody(payoutId: string, orgId: string): Promise<any> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/payouts/payout/non-custodial/body-to-sign/${payoutId}`, {
+      const response = await fetch(`${this.baseUrl}/api/payouts/payout/end-user-custodial/body-to-sign/${payoutId}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
@@ -96,9 +96,9 @@ export class MuralApiClient {
   }
 
   // Execute a non-custodial payout
-  async executeNonCustodialPayout(payoutId: string, signature: string, orgId: string): Promise<any> {
+  async executeEndUserCustodialPayout(payoutId: string, signature: string, orgId: string): Promise<any> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/payouts/payout/non-custodial/execute/${payoutId}`, {
+      const response = await fetch(`${this.baseUrl}/api/payouts/payout/end-user-custodial/execute/${payoutId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -285,12 +285,12 @@ export class MuralApiClient {
   }
 }
 
-export class NonCustodialSDKWrapper {
-  private sdk: NonCustodialSDK | null = null;
+export class EndUserCustodialSDKWrapper {
+  private sdk: EndUserCustodialSDK | null = null;
   private iframeElement: HTMLElement | null = null;
 
   constructor() {
-    console.log('NonCustodialSDKWrapper initialized');
+    console.log('EndUserCustodialSDKWrapper initialized');
   }
 
   async initialize(iframeContainerId: string = 'auth-iframe-container-id') {
@@ -304,8 +304,8 @@ export class NonCustodialSDKWrapper {
         document.body.appendChild(this.iframeElement);
       }
 
-      console.log('Creating NonCustodialSDK instance...');
-      this.sdk = await NonCustodialSDK.createInstance({
+      console.log('Creating EndUserCustodialSDK instance...');
+      this.sdk = await EndUserCustodialSDK.createInstance({
         iframeElement: this.iframeElement,
         iframeContainerId: iframeContainerId,
       });
@@ -416,4 +416,4 @@ export class NonCustodialSDKWrapper {
   }
 }
 
-export default NonCustodialSDKWrapper; 
+export default EndUserCustodialSDKWrapper; 

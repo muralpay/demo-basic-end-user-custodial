@@ -1,6 +1,6 @@
-# Non-Custodial SDK Demo
+# End-User Custodial SDK Demo
 
-A simple demo app to test the Non-Custodial Browser SDK functionality.
+A simple demo app to test the End-User Custodial Browser SDK functionality.
 
 ## Quick Start
 
@@ -9,6 +9,10 @@ Create a `.env` file in the root directory:
 ```
 VITE_MURAL_API_KEY=your_api_key_here
 VITE_MURAL_API_URL=your_api_url_here
+```
+You can run the following to copy the example env file:
+```
+cp .env.example .env
 ```
 
 ### 2. Install & Run

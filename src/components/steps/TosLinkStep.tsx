@@ -1,7 +1,7 @@
 import React from 'react';
 import { Step, Button, FormInput, InfoBox, ResultDisplay } from '../ui';
 import { MuralApiClient } from '../../index';
-import { useNonCustodialContext } from '../../context/NonCustodialContext';
+import { useEndUserCustodialContext } from '../../context/EndUserCustodialContext';
 
 interface TosLinkStepProps {
   stepNumber: number;
@@ -22,7 +22,7 @@ export const TosLinkStep: React.FC<TosLinkStepProps> = ({
     setTosLink,
     setTosLinkVisible,
     setStepLoading
-  } = useNonCustodialContext();
+  } = useEndUserCustodialContext();
 
   const isCompleted = completedSteps[stepNumber - 1];
   const isLoading = loadingStates[stepNumber - 1];

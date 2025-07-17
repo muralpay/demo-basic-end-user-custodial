@@ -1,7 +1,7 @@
 import React from 'react';
 import { Step, Button, FormInput, InfoBox, ResultDisplay } from '../ui';
 import { MuralApiClient } from '../../index';
-import { useNonCustodialContext } from '../../context/NonCustodialContext';
+import { useEndUserCustodialContext } from '../../context/EndUserCustodialContext';
 
 interface KycLinkStepProps {
   stepNumber: number;
@@ -22,7 +22,7 @@ export const KycLinkStep: React.FC<KycLinkStepProps> = ({
     setKycLink,
     setKycLinkVisible,
     setStepLoading
-  } = useNonCustodialContext();
+  } = useEndUserCustodialContext();
 
   const isCompleted = completedSteps[stepNumber - 1];
   const isLoading = loadingStates[stepNumber - 1];

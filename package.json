@@ -35,7 +35,7 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "@muralpay/browser-sdk": "^1.0.0",
+    "@muralpay/browser-sdk": "^2.0.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "dotenv": "^16.5.0",

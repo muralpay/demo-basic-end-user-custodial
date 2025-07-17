@@ -1,6 +1,6 @@
 import React from 'react';
 import { Step, Button, InfoBox, ResultDisplay } from '../ui';
-import { useNonCustodialContext } from '../../context/NonCustodialContext';
+import { useEndUserCustodialContext } from '../../context/EndUserCustodialContext';
 
 interface SignPayoutStepProps {
   stepNumber: number;
@@ -20,7 +20,7 @@ export const SignPayoutStep: React.FC<SignPayoutStepProps> = ({
     markStepComplete,
     setSignature,
     setStepLoading
-  } = useNonCustodialContext();
+  } = useEndUserCustodialContext();
 
   const isCompleted = completedSteps[stepNumber - 1];
   const isLoading = loadingStates[stepNumber - 1];

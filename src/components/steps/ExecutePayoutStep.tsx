@@ -1,7 +1,7 @@
 import React from 'react';
 import { Step, Button, InfoBox, ResultDisplay } from '../ui';
 import { MuralApiClient } from '../../index';
-import { useNonCustodialContext } from '../../context/NonCustodialContext';
+import { useEndUserCustodialContext } from '../../context/EndUserCustodialContext';
 
 interface ExecutePayoutStepProps {
   stepNumber: number;
@@ -22,7 +22,7 @@ export const ExecutePayoutStep: React.FC<ExecutePayoutStepProps> = ({
     markStepComplete,
     setPayoutStatus,
     setStepLoading
-  } = useNonCustodialContext();
+  } = useEndUserCustodialContext();
 
   const isCompleted = completedSteps[stepNumber - 1];
   const isLoading = loadingStates[stepNumber - 1];
@@ -39,7 +39,7 @@ export const ExecutePayoutStep: React.FC<ExecutePayoutStepProps> = ({
     
     try {
       const apiClient = new MuralApiClient();
-      const result = await apiClient.executeNonCustodialPayout(payoutId, signature, orgId);
+      const result = await apiClient.executeEndUserCustodialPayout(payoutId, signature, orgId);
       setPayoutStatus('SUCCESS');
       addLog(`✅ Payout executed successfully!`, 'success');
       addLog(`💸 Status: SUCCESS`, 'success');

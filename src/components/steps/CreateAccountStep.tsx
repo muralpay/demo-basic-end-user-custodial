@@ -1,7 +1,7 @@
 import React from "react";
 import { Step, Button, FormInput, InfoBox, ResultDisplay } from "../ui";
 import { MuralApiClient } from '../../index';
-import { useNonCustodialContext } from '../../context/NonCustodialContext';
+import { useEndUserCustodialContext } from '../../context/EndUserCustodialContext';
 
 interface CreateAccountStepProps {
   stepNumber: number;
@@ -29,7 +29,7 @@ export const CreateAccountStep: React.FC<CreateAccountStepProps> = ({
     setAccountInitializing,
     setIsLoadingAccountDetails,
     setStepLoading
-  } = useNonCustodialContext();
+  } = useEndUserCustodialContext();
 
   const isCompleted = completedSteps[stepNumber - 1];
   const isLoading = loadingStates[stepNumber - 1];
