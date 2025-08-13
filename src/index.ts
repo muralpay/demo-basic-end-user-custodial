@@ -120,6 +120,54 @@ export class MuralApiClient {
     }
   }
 
+  // Get cancel payout request body to sign
+  async getCancelPayoutRequestBody(payoutId: string, orgId: string): Promise<any> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/payouts/payout/end-user-custodial/cancel-body-to-sign/${payoutId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'on-behalf-of': orgId
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        throw new Error(`API Error (${response.status}): ${errorData.message || response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Failed to get cancel payout request body:', error);
+      throw error;
+    }
+  }
+
+  // Cancel a non-custodial payout
+  async cancelEndUserCustodialPayout(payoutId: string, signature: string, orgId: string): Promise<any> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/payouts/payout/end-user-custodial/cancel/${payoutId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.apiKey}`,
+          'on-behalf-of': orgId
+        },
+        body: JSON.stringify({ signature })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        throw new Error(`API Error (${response.status}): ${errorData.message || response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Failed to cancel payout:', error);
+      throw error;
+    }
+  }
+
   // Get the Terms of Service link for an organization
   async getOrganizationTosLink(orgId: string): Promise<string> {
     try {

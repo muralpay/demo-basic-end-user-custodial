@@ -18,6 +18,7 @@ export const ExecutePayoutStep: React.FC<ExecutePayoutStepProps> = ({
     signature,
     payoutId,
     orgId,
+    isUsingCancellationFlow,
     addLog,
     markStepComplete,
     setPayoutStatus,
@@ -26,7 +27,7 @@ export const ExecutePayoutStep: React.FC<ExecutePayoutStepProps> = ({
 
   const isCompleted = completedSteps[stepNumber - 1];
   const isLoading = loadingStates[stepNumber - 1];
-  const isActive = currentStep === stepNumber;
+  const isActive = currentStep === stepNumber && !isUsingCancellationFlow;
 
   const handleExecutePayout = async () => {
     if (!signature || !payoutId || !orgId) {
@@ -35,7 +36,7 @@ export const ExecutePayoutStep: React.FC<ExecutePayoutStepProps> = ({
     }
     
     setStepLoading(stepNumber - 1, true);
-    addLog('🔄 Step 14: Executing payout...');
+    addLog('🔄 Step 15: Executing payout...');
     
     try {
       const apiClient = new MuralApiClient();
@@ -44,7 +45,7 @@ export const ExecutePayoutStep: React.FC<ExecutePayoutStepProps> = ({
       addLog(`✅ Payout executed successfully!`, 'success');
       addLog(`💸 Status: SUCCESS`, 'success');
       markStepComplete(stepNumber - 1);
-      addLog(`🎉 Congratulations! You have completed the entire non-custodial payout flow!`, 'success');
+      addLog(`🎉 Congratulations! You have completed the entire end-user custodial payout execution flow!`, 'success');
     } catch (error) {
       addLog(`❌ Failed to execute payout: ${error instanceof Error ? error.message : String(error)}`, 'error');
     } finally {
@@ -63,6 +64,11 @@ export const ExecutePayoutStep: React.FC<ExecutePayoutStepProps> = ({
     </Button>
   );
 
+  // Only show this step if using execution flow
+  if (isUsingCancellationFlow) {
+    return null;
+  }
+
   return (
     <Step
       title="Execute Payout"
@@ -76,7 +82,7 @@ export const ExecutePayoutStep: React.FC<ExecutePayoutStepProps> = ({
       {isCompleted && (
         <InfoBox variant="success">
           <h4 style={{ marginTop: 0 }}>🎉 Congratulations!</h4>
-          <p>You have successfully completed the non-custodial payout flow:</p>
+          <p>You have successfully completed the end-user custodial payout execution flow:</p>
           <ul style={{ marginBottom: '10px' }}>
             <li>✅ Created organization and completed KYC</li>
             <li>✅ Initialized SDK and authenticated</li>

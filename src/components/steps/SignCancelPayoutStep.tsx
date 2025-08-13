@@ -2,54 +2,54 @@ import React from 'react';
 import { Step, Button, InfoBox, ResultDisplay } from '../ui';
 import { useEndUserCustodialContext } from '../../context/EndUserCustodialContext';
 
-interface SignPayoutStepProps {
+interface SignCancelPayoutStepProps {
   stepNumber: number;
 }
 
-export const SignPayoutStep: React.FC<SignPayoutStepProps> = ({
+export const SignCancelPayoutStep: React.FC<SignCancelPayoutStepProps> = ({
   stepNumber
 }) => {
   const {
     currentStep,
     completedSteps,
     loadingStates,
-    signature,
-    payoutPayload,
+    cancelSignature,
+    cancelPayload,
     wrapper,
     isUsingCancellationFlow,
     addLog,
     markStepComplete,
-    setSignature,
+    setCancelSignature,
     setStepLoading
   } = useEndUserCustodialContext();
 
   const isCompleted = completedSteps[stepNumber - 1];
   const isLoading = loadingStates[stepNumber - 1];
-  const isActive = currentStep === stepNumber && !isUsingCancellationFlow;
+  const isActive = currentStep === stepNumber && isUsingCancellationFlow;
 
-  const handleSignPayout = async () => {
-    if (!payoutPayload || !wrapper) {
+  const handleSignCancelPayout = async () => {
+    if (!cancelPayload || !wrapper) {
       addLog('❌ Please complete previous steps first', 'error');
       return;
     }
     
     setStepLoading(stepNumber - 1, true);
-    addLog('🔄 Step 14: Signing payout with SDK...');
+    addLog('🔄 Step 14: Signing payout cancellation with SDK...');
     
     try {
-      const parsedPayload = JSON.parse(payoutPayload);
+      const parsedPayload = JSON.parse(cancelPayload);
       const signedPayload = await wrapper.signPayoutPayload(parsedPayload);
       
       if (signedPayload === null) {
-        throw new Error('Failed to sign payload - signature returned null');
+        throw new Error('Failed to sign cancellation payload - signature returned null');
       }
       
-      setSignature(signedPayload);
-      addLog(`✅ Payout signed successfully!`, 'success');
+      setCancelSignature(signedPayload);
+      addLog(`✅ Payout cancellation signed successfully!`, 'success');
       markStepComplete(stepNumber - 1);
-      addLog(`➡️ Next: Execute the payout`, 'info');
+      addLog(`➡️ Next: Execute the payout cancellation`, 'info');
     } catch (error) {
-      addLog(`❌ Failed to sign payout: ${error instanceof Error ? error.message : String(error)}`, 'error');
+      addLog(`❌ Failed to sign payout cancellation: ${error instanceof Error ? error.message : String(error)}`, 'error');
     } finally {
       setStepLoading(stepNumber - 1, false);
     }
@@ -70,40 +70,46 @@ export const SignPayoutStep: React.FC<SignPayoutStepProps> = ({
 
   const actions = (
     <Button
-      onClick={handleSignPayout}
+      onClick={handleSignCancelPayout}
       disabled={!isActive}
       loading={isLoading}
       variant={isCompleted ? 'success' : 'primary'}
     >
-      {isCompleted ? '✅ Payout Signed' : 'Sign Payout'}
+      {isCompleted ? '✅ Cancellation Signed' : 'Sign Cancellation'}
     </Button>
   );
 
-  // Only show this step if using execution flow
-  if (isUsingCancellationFlow) {
+  // Only show this step if using cancellation flow
+  if (!isUsingCancellationFlow) {
     return null;
   }
 
   return (
     <Step
-      title="Sign Payout"
-      description="Cryptographically sign the payout payload using your private key"
+      title="Sign Cancel Payout"
+      description="Cryptographically sign the payout cancellation payload using your private key"
       stepNumber={stepNumber}
       isActive={isActive}
       isCompleted={isCompleted}
       isLoading={isLoading}
       actions={actions}
     >
-      {signature && (
+      <InfoBox variant="warning">
+        <p style={{ marginBottom: 0 }}>
+          ⚠️ <strong>Cancellation Flow:</strong> This will sign the cancellation request.
+        </p>
+      </InfoBox>
+      
+      {cancelSignature && (
         <div style={{ marginTop: '15px' }}>
           <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>
-            Signature:
+            Cancellation Signature:
           </label>
           <div style={signatureDisplayStyles}>
-            {signature}
+            {cancelSignature}
           </div>
         </div>
       )}
     </Step>
   );
-}; 
+};

@@ -23,9 +23,13 @@ import {
   CreateAccountStep,
   FundAccountStep,
   CreatePayoutStep,
+  PayoutChoiceStep,
   GetPayoutBodyStep,
+  GetCancelPayoutBodyStep,
   SignPayoutStep,
-  ExecutePayoutStep
+  SignCancelPayoutStep,
+  ExecutePayoutStep,
+  ExecuteCancelPayoutStep
 } from './components/steps';
 
 const EndUserCustodialDemoContent: React.FC = () => {
@@ -50,9 +54,13 @@ const EndUserCustodialDemoContent: React.FC = () => {
     'Create Account',
     'Fund Account',
     'Create Payout',
+    'Choose Action',
     'Get Payout Body',
+    'Get Cancel Body',
     'Sign Payout',
-    'Execute Payout'
+    'Sign Cancel',
+    'Execute Payout',
+    'Execute Cancel'
   ];
 
   const containerStyles = {
@@ -94,9 +102,13 @@ const EndUserCustodialDemoContent: React.FC = () => {
       <CreateAccountStep stepNumber={9} />
       <FundAccountStep stepNumber={10} />
       <CreatePayoutStep stepNumber={11} />
-      <GetPayoutBodyStep stepNumber={12} />
-      <SignPayoutStep stepNumber={13} />
-      <ExecutePayoutStep stepNumber={14} />
+      <PayoutChoiceStep stepNumber={12} />
+      <GetPayoutBodyStep stepNumber={13} />
+      <GetCancelPayoutBodyStep stepNumber={14} />
+      <SignPayoutStep stepNumber={15} />
+      <SignCancelPayoutStep stepNumber={16} />
+      <ExecutePayoutStep stepNumber={17} />
+      <ExecuteCancelPayoutStep stepNumber={18} />
 
       {/* Hidden iframe container for SDK */}
       <div id="auth-iframe-container-id" style={{ display: 'none' }}></div>

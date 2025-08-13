@@ -101,6 +101,14 @@ interface EndUserCustodialContextType {
   payoutStatus: string;
   setPayoutStatus: (status: string) => void;
   
+  // Cancellation flow state
+  isUsingCancellationFlow: boolean;
+  setIsUsingCancellationFlow: (using: boolean) => void;
+  cancelPayload: string;
+  setCancelPayload: (payload: string) => void;
+  cancelSignature: string;
+  setCancelSignature: (signature: string) => void;
+  
   // Flow progress
   currentStep: number;
   setCurrentStep: (step: number) => void;
@@ -167,10 +175,15 @@ export const EndUserCustodialProvider: React.FC<EndUserCustodialProviderProps> =
   const [signature, setSignature] = useState<string>('');
   const [payoutStatus, setPayoutStatus] = useState<string>('');
   
+  // Cancellation flow state
+  const [isUsingCancellationFlow, setIsUsingCancellationFlow] = useState<boolean>(false);
+  const [cancelPayload, setCancelPayload] = useState<string>('');
+  const [cancelSignature, setCancelSignature] = useState<string>('');
+  
   // Flow progress tracking
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>(new Array(14).fill(false));
-  const [loadingStates, setLoadingStates] = useState<boolean[]>(new Array(14).fill(false));
+  const [completedSteps, setCompletedSteps] = useState<boolean[]>(new Array(18).fill(false)); // Updated to 18 steps
+  const [loadingStates, setLoadingStates] = useState<boolean[]>(new Array(18).fill(false)); // Updated to 18 steps
 
   // Helper functions
   const addLog = (message: string, type: 'info' | 'error' | 'success' | 'warning' = 'info') => {
@@ -302,6 +315,14 @@ export const EndUserCustodialProvider: React.FC<EndUserCustodialProviderProps> =
     setSignature,
     payoutStatus,
     setPayoutStatus,
+    
+    // Cancellation flow state
+    isUsingCancellationFlow,
+    setIsUsingCancellationFlow,
+    cancelPayload,
+    setCancelPayload,
+    cancelSignature,
+    setCancelSignature,
     
     // Flow progress
     currentStep,
