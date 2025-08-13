@@ -104,11 +104,11 @@ const EndUserCustodialDemoContent: React.FC = () => {
       <CreatePayoutStep stepNumber={11} />
       <PayoutChoiceStep stepNumber={12} />
       <GetPayoutBodyStep stepNumber={13} />
-      <GetCancelPayoutBodyStep stepNumber={14} />
-      <SignPayoutStep stepNumber={15} />
-      <SignCancelPayoutStep stepNumber={16} />
-      <ExecutePayoutStep stepNumber={17} />
-      <ExecuteCancelPayoutStep stepNumber={18} />
+      <GetCancelPayoutBodyStep stepNumber={13} />
+      <SignPayoutStep stepNumber={14} />
+      <SignCancelPayoutStep stepNumber={14} />
+      <ExecutePayoutStep stepNumber={15} />
+      <ExecuteCancelPayoutStep stepNumber={15} />
 
       {/* Hidden iframe container for SDK */}
       <div id="auth-iframe-container-id" style={{ display: 'none' }}></div>

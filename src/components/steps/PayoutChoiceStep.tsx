@@ -53,8 +53,7 @@ export const PayoutChoiceStep: React.FC<PayoutChoiceStepProps> = ({
     newCompletedSteps[currentIndex] = true;
     setCompletedSteps(newCompletedSteps);
     
-    // Set next step based on choice: 13 for execution, 14 for cancellation
-    const nextStep = isUsingCancellationFlow ? 14 : 13;
+    const nextStep = 13;
     setCurrentStep(nextStep);
     
     addLog(`➡️ Next: ${isUsingCancellationFlow ? 'Get cancellation body' : 'Get payout body'}`, 'info');
