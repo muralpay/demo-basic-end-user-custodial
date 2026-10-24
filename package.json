@@ -1,44 +1,32 @@
 {
-  "name": "non-custodial-sdk-wrapper",
+  "name": "demo-basic-end-user-custodial",
+  "private": true,
   "version": "1.0.0",
-  "description": "SDK wrapper for Non-Custodial SDK service",
+  "description": "Demo of End-User Custodial payouts with the Mural API and @muralpay/browser-sdk",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "vite build",
-    "test": "jest",
     "dev": "vite",
-    "clean": "rimraf dist",
-    "prepublishOnly": "npm run clean && npm run build",
-    "test:manual": "tsx test/manual-test.ts",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "keywords": [
-    "sdk",
-    "wrapper",
-    "typescript",
-    "non-custodial"
+    "mural",
+    "payouts",
+    "end-user-custodial",
+    "demo"
   ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^29.5.4",
     "@types/node": "^20.5.9",
     "@vitejs/plugin-react": "^4.5.2",
-    "http-server": "^14.1.1",
-    "jest": "^29.6.4",
-    "rimraf": "^5.0.1",
-    "ts-jest": "^29.1.1",
-    "tsx": "^4.0.0",
     "typescript": "^5.2.2",
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "@muralpay/browser-sdk": "^2.0.0",
+    "@muralpay/browser-sdk": "^2.0.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "dotenv": "^16.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   }

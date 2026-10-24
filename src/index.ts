@@ -1,26 +1,19 @@
-// Non-Custodial SDK Wrapper Demo
+// End-User Custodial SDK Wrapper Demo
 // This wraps the @muralpay/browser-sdk for testing
 
 import { EndUserCustodialSDK } from '@muralpay/browser-sdk';
-import { MURAL_API_CONFIG } from './config';
 
-// Mural API Client for making API calls
+// Mural API Client for making API calls.
+// Requests go to same-origin /api/*, where the dev server's proxy (see
+// vite.config.ts) attaches the API key. The key never reaches the browser.
 export class MuralApiClient {
-  private baseUrl: string;
-  private apiKey: string;
-
-  constructor() {
-    this.baseUrl = MURAL_API_CONFIG.API_URL!;
-    this.apiKey = MURAL_API_CONFIG.API_KEY!;
-    console.log('MuralApiClient initialized with config');
-  }
+  private baseUrl = '';
 
   // Create a non-custodial organization
   async createEndUserCustodialOrg(payload: any, onBehalfOf?: string): Promise<any> {
     try {
       const headers: Record<string, string> = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`
+        'Content-Type': 'application/json'
       };
 
       if (onBehalfOf) {
@@ -54,7 +47,6 @@ export class MuralApiClient {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`,
           'on-behalf-of': orgId
         },
         body: JSON.stringify(payload)
@@ -78,7 +70,6 @@ export class MuralApiClient {
       const response = await fetch(`${this.baseUrl}/api/payouts/payout/end-user-custodial/body-to-sign/${payoutId}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
           'on-behalf-of': orgId
         }
       });
@@ -102,7 +93,6 @@ export class MuralApiClient {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`,
           'on-behalf-of': orgId
         },
         body: JSON.stringify({ signature })
@@ -124,10 +114,7 @@ export class MuralApiClient {
   async getOrganizationTosLink(orgId: string): Promise<string> {
     try {
       const response = await fetch(`${this.baseUrl}/api/organizations/${orgId}/tos-link`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`
-        }
+        method: 'GET'
       });
 
       if (!response.ok) {
@@ -147,10 +134,7 @@ export class MuralApiClient {
   async getOrganization(orgId: string): Promise<any> {
     try {
       const response = await fetch(`${this.baseUrl}/api/organizations/${orgId}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`
-        }
+        method: 'GET'
       });
 
       if (!response.ok) {
@@ -165,14 +149,11 @@ export class MuralApiClient {
     }
   }
 
-  // Get the KYC link for an organization
-  async getOrganizationKycLink(orgId: string): Promise<string> {
+  // Get a fresh KYC link for an organization (valid for 24 hours)
+  async getOrganizationKycLink(orgId: string): Promise<{ kycLink: string; expiresAt: string }> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/organizations/${orgId}/kyc-link`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`
-        }
+      const response = await fetch(`${this.baseUrl}/api/organizations/${orgId}/kyc-link/v2`, {
+        method: 'GET'
       });
 
       if (!response.ok) {
@@ -180,8 +161,7 @@ export class MuralApiClient {
         throw new Error(`API Error (${response.status}): ${errorData.message || response.statusText}`);
       }
 
-      const data = await response.json();
-      return data.kycLink;
+      return await response.json();
     } catch (error) {
       console.error('Failed to get KYC link:', error);
       throw error;
@@ -195,7 +175,6 @@ export class MuralApiClient {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`,
           'on-behalf-of': orgId
         },
         body: JSON.stringify(payload)
@@ -220,7 +199,6 @@ export class MuralApiClient {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`,
           'on-behalf-of': orgId
         },
         body: JSON.stringify(payload)
@@ -244,7 +222,6 @@ export class MuralApiClient {
       const response = await fetch(`${this.baseUrl}/api/accounts`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
           'on-behalf-of': orgId
         }
       });
@@ -267,7 +244,6 @@ export class MuralApiClient {
       const response = await fetch(`${this.baseUrl}/api/accounts/${accountId}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
           'on-behalf-of': orgId
         }
       });

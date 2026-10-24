@@ -39,8 +39,8 @@ export const KycLinkStep: React.FC<KycLinkStepProps> = ({
     
     try {
       const apiClient = new MuralApiClient();
-      const link = await apiClient.getOrganizationKycLink(orgId);
-      addLog(`✅ KYC link retrieved successfully!`, 'success');
+      const { kycLink: link, expiresAt } = await apiClient.getOrganizationKycLink(orgId);
+      addLog(`✅ KYC link retrieved successfully! Expires at ${new Date(expiresAt).toLocaleString()}`, 'success');
       setKycLink(link);
       setKycLinkVisible(true);
       markStepComplete(stepNumber - 1);
