@@ -36,3 +36,7 @@ This demo provides a working example with sample data that you can modify:
 Feel free to modify the example data in the code to test different scenarios.
 
 That's it! 🚀
+
+## Tests
+
+Run `npm test -- --runInBand` to check that business approver selection and the authentication challenge stay aligned. These component callback tests mock the API client and SDK; they do not send email or submit payouts.

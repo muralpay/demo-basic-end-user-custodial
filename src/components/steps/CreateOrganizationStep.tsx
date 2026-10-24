@@ -297,7 +297,10 @@ export const CreateOrganizationStep: React.FC<CreateOrganizationStepProps> = ({
                       name="selectedApprover"
                       value={index}
                       checked={selectedApproverIndex === index}
-                      onChange={() => setSelectedApproverIndex(index)}
+                      onChange={() => {
+                        setSelectedApproverIndex(index);
+                        setApproverId(approver.id);
+                      }}
                       style={radioInputStyles}
                     />
                     <div>
